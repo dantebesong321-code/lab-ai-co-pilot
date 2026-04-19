@@ -267,6 +267,102 @@ jsconst sumEvenNumbers = (numbers) =>
 
 
 
+##  Bonus Round
+
+> “What are 3 common mistakes junior developers make in DOM manipulation, and how can they be avoided?”
+
+Who gave the clearest, most useful guidance?
+
+
+## ChatGPT:
+3 common DOM manipulation mistakes (and how to avoid them)
+ 1. Repeated DOM queries inside loops
+
+Problem:
+
+for (let i = 0; i < 100; i++) {
+  document.getElementById('item').textContent = i;
+}
+
+Fix: cache the element
+
+const item = document.getElementById('item');
+for (let i = 0; i < 100; i++) {
+  item.textContent = i;
+}
+2. Using innerHTML unnecessarily
+
+Problem:
+
+element.innerHTML = userInput;
+Risk of XSS (security issue)
+Slower than needed
+
+Fix: use textContent
+
+element.textContent = userInput;
+3. Ignoring accessibility when updating content
+
+Problem:
+
+status.textContent = "Updated!";
+
+(Screen readers may not announce changes)
+
+Fix: use ARIA live regions
+
+<p id="status" aria-live="polite"></p>
+Bonus mistake (very common):
+
+Adding event listeners to non-interactive elements without keyboard support
+
+Fix:
+
+Use semantic elements like <button>
+Or add keyboard handlers (keydown) if necessary
+
+
+
+## Claude:
+Common DOM Manipulation Mistakes
+Mistake 1: Querying the DOM inside loops
+Repeatedly calling document.getElementById or querySelector inside a loop is slow — the browser re-traverses the DOM each time.
+js// Slow — queries on every iteration
+for (let i = 0; i < 100; i++) {
+  document.getElementById('counter').textContent = i;
+}
+
+// Fast — query once, reuse the reference
+const counter = document.getElementById('counter');
+for (let i = 0; i < 100; i++) {
+  counter.textContent = i;
+}
+
+Mistake 2: Using innerHTML with user input
+Setting innerHTML directly with unvalidated user data opens the door to XSS (Cross-Site Scripting) attacks.
+js// Dangerous — executes injected scripts
+el.innerHTML = userInput;
+
+// Safe — treats input as plain text, not markup
+el.textContent = userInput;
+
+Mistake 3: Attaching event listeners inside loops
+Adding a new listener on each iteration causes them to stack up, leading to duplicate callbacks and memory leaks.
+js// Attaches a new listener every time the loop runs
+items.forEach(item => {
+  button.addEventListener('click', () => doSomething(item));
+});
+
+// Use event delegation — one listener on the parent
+list.addEventListener('click', (e) => {
+  if (e.target.matches('.item-btn')) {
+    doSomething(e.target.dataset.item);
+  }
+});
+
+
+
+
 
 ## AI Evaluation Table
 
